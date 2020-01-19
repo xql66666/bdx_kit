@@ -14,3 +14,21 @@ export function findAllInfoList(currentPage) {
         method: 'post'
       })
   }
+
+  export function addInfoComment(infoId, commentContext) {
+    return request({
+        url: `/${group_name}/${api_name}/addInfoComment/`,
+        method: 'post',
+        data: {
+            infoId,
+            commentContext
+        }
+      })
+  }
+  
+  export function findInfoComment(infoId) {
+    return request({
+        url: `/${group_name}/${api_name}/findInfoComment/${infoId}`,
+        method: 'post',
+      })
+  }

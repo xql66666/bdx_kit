@@ -32,7 +32,10 @@
                         <h2 class="info_title_header_h2" style="margin-top: 2px; margin-bottom: 0px;">{{info.infoName}}</h2>
                       </div>
                       <div class="info_title_header_down">
-                        <span class="info_title_header_down_type">资讯</span>
+                        <span class="info_title_header_down_type">资讯</span>&nbsp;&nbsp;
+                        <span style="color: #6CC2F5; font-size: 14px;">{{info.nickname}}</span>&nbsp;&nbsp;&nbsp;
+                        <span style="font-size: 14px;">最后发布于{{info.createTime | formatData}}</span>
+                        
                       </div>
                   </div>
                   <!-- 分割线 -->
@@ -42,7 +45,47 @@
                   <div>
                   </div>
               </div>
-              <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+              
+            </el-card>
+
+            <el-card class="info_commment_boxcard" shadow="always">
+              <!-- 发表评论的div -->
+                <div class="info_comment_edit">
+                    <!-- 展示用户头像 -->
+                    <div class="usr-image">
+                        <a href="//me.csdn.net/qq_37208185" target="_blank" rel="noopener">
+                          <el-avatar :size="24" :src="headimg" v-bind="headimg"></el-avatar>
+                        </a>
+                    </div>
+                    <div class="commentform">
+                      <textarea class="comment_content" v-model="commentContext" placeholder="想对作者说点什么" maxlength="1000"></textarea>
+                      <!-- button -->
+                      <div class="info_comment_button_div">
+                          <div class="info_comment_button_right">
+                              <input type="button" @click="submitCommenr()" class="info_comment_button" value="发表评论">
+                          </div>
+                      </div>
+                    </div>
+                    
+                </div>
+                <!-- 展示评论的div -->
+                <diV class="info_reply_list">
+                    <ul class="info_reply_ul" v-for="(infoReply, index) in infoReplys" :key="index">
+                      <li class="info_reply_li">
+                        <a target="_blank" href="//me.csdn.net/qq_37208185" class="info_reply_li_a">
+                          <el-avatar :size="24" :src="infoReply.headImgUrl" v-bind="infoReply.headImgUrl"></el-avatar>
+                        </a>
+                        <div class="info_reply_li_b">
+                          <div class="info_reply_li_c">
+                            <span class="info_reply_li_nickname">{{infoReply.nickname}}</span>
+                            <span class="info_reply_li_date">{{infoReply.createTime | formatData}}</span>
+                            <span class="info_reply_li_context">{{infoReply.infoReplyContent}}</span>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <br /><br /><br />
+                </div>
             </el-card>
             
           </main>
@@ -68,19 +111,21 @@
             </el-card>
           </aside>
 
+          <div style="clear:both;"></div>
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          
+          
       </div>
-       <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+      
+      
     </div>
   </div>
 </template>
 
 <script>
 import { Tabs } from "@/components";
-import { findInfoDeatil } from '@/api/info'
+import { findInfoDeatil, addInfoComment, findInfoComment } from '@/api/info'
+import { mapGetters } from 'vuex'
 export default {
   components: {
       Tabs
@@ -88,20 +133,55 @@ export default {
   bodyClass: "profile-page",
   data() {
       return {
-          info: null
+          info: null,
+          commentContext: '',
+          infoReplys: null,
       }
   },
   created () {
     this.findInfo()
+    this.findInfoReply()
   },
   filters: {
-    
+    formatData: function (value) {
+      let date = new Date(value);
+        let y = date.getFullYear();
+        let MM = date.getMonth() + 1;
+        MM = MM < 10 ? ('0' + MM) : MM;
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        let h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        let m = date.getMinutes();
+        m = m < 10 ? ('0' + m) : m;
+        let s = date.getSeconds();
+        s = s < 10 ? ('0' + s) : s;
+        return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+    },
   },
   methods: {
     findInfo() {
         findInfoDeatil(this.$route.params.id).then(response => {
             this.info = response.data
         })
+    },
+    submitCommenr() {
+        
+        addInfoComment(this.$route.params.id, this.commentContext).then(response => {
+            if(response.code === 200) {
+              this.$message({
+                      message: '回复成功！',
+                      type: 'success'
+                  });
+              this.commentContext = '';
+              
+            }
+        })
+    },
+    findInfoReply() {
+       findInfoComment(this.$route.params.id).then(response => {
+            this.infoReplys = response.data
+       })
     }
   },
   props: {
@@ -119,7 +199,10 @@ export default {
       return {
         backgroundImage: `url(${this.header})`
       };
-    }
+    },
+    ...mapGetters([
+      'headimg'
+    ]),
   }
 }
 </script>
@@ -173,6 +256,10 @@ export default {
     outline: 0;
   }
 
+  .info_commment_boxcard {
+    margin-top: 8px;
+  }
+
   .info_title_header_h2 {
     display: block;
     font-size: 33px;
@@ -199,7 +286,7 @@ export default {
   .info_aside_boxcard_head_a {
     position: relative;
     width: 48px;
-    width: 48px;
+    height: 48px;
     flex-shrink: 0;
     padding: 0;
     margin: 0;
@@ -236,6 +323,149 @@ export default {
     border-radius: 2px;
     vertical-align: 1px;
     
+  }
+
+  .info_comment_edit {
+    padding: 16px 24px 8px;
+    display: flex;
+  }
+
+  .usr-image {
+    margin-right: 8px;
+    margin: 0;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .commentform {
+    width: 100%;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+  }
+
+  .comment_content {
+    margin: 0;
+    margin-left: 8px;
+    padding: 0;
+    height: 80px;
+    display: block;
+    width: 100%;
+    padding: 7px 8px;
+    background: #fff;
+    border: 1px solid #c1c1c1;
+    border-radius: 4px;
+    resize: none;
+    height: 80px;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  textarea {
+    overflow: auto;
+    font-family: monospace;
+  }
+
+  .info_comment_button_div {
+    display: flex;
+    margin-top: 8px;
+  }
+
+  .info_comment_button_right {
+    margin-left: auto;
+  }
+
+  .info_comment_button {
+    margin: 0;
+    margin-left: 16px;
+    height: 30px;
+    line-height: 28px;
+    min-width: 72px;
+    color: #fff !important;
+    border: 1px solid #ca0c16 !important;
+    background-color: #ca0c16 !important;
+    padding: 0 8px;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .info_reply_list {
+    padding: 0 24px;
+    overflow: hidden;
+    
+  }
+
+  .info_reply_ul {
+    margin-top: 22px;
+    border-bottom: 1px dashed #e0e0e0;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .info_reply_li {
+    padding: 0;
+    margin: 0;
+    margin-top: 14px;
+    list-style: none;
+    position: relative;
+    margin-bottom: 12px;
+    display: flex !important;
+  }
+
+  .info_reply_li_a {
+    display: block;
+    margin-right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+
+  .info_reply_li_b {
+    position: relative;
+    width: 97%;
+  }
+
+  .info_reply_li_c {
+    width: 100%;
+    line-height: 22px;
+    margin-bottom: 4px;
+    word-wrap: break-word;
+    color: #999;
+    padding: 0;
+    margin: 0;
+  }
+
+  .info_reply_li_nickname {
+    margin-left: 2px;
+    margin-right: 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: #2e2e2e;
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'PingFangSC-Semibold';
+  }
+
+  .info_reply_li_date {
+    margin-left: 14px;
+    font-size: 12px;
+    color: #999;
+    vertical-align: top;
+    display: inline-block;
+  }
+
+  .info_reply_li_context {
+    margin-left: 14px;
+    font-size: 14px;
+    color: #2e2e2e;
+    display: inline-block;
+    vertical-align: top;
+    font-weight: 400;
   }
 
 </style>
