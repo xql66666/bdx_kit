@@ -32,7 +32,7 @@
                         <h2 class="info_title_header_h2" style="margin-top: 2px; margin-bottom: 0px;">{{info.infoName}}</h2>
                       </div>
                       <div class="info_title_header_down">
-                        <span class="info_title_header_down_type">资讯</span>&nbsp;&nbsp;
+                        <span class="info_title_header_down_type">{{info.infoType | type}}</span>&nbsp;&nbsp;
                         <span style="color: #6CC2F5; font-size: 14px;">{{info.nickname}}</span>&nbsp;&nbsp;&nbsp;
                         <span style="font-size: 14px;">最后发布于{{info.createTime | formatData}}</span>
                         
@@ -158,6 +158,24 @@ export default {
         s = s < 10 ? ('0' + s) : s;
         return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
     },
+       type: function(value) {
+          // for( let i in value) {
+          //     return i
+          // }
+          if(value == "1") {
+            return "资讯"
+          }
+          if(value == "2") {
+            return "通知"
+          }
+          if(value == "3") {
+            return "活动"
+          }
+          if(value == "4") {
+            return "其他"
+          }
+          
+       }
   },
   methods: {
     findInfo() {
@@ -174,7 +192,7 @@ export default {
                       type: 'success'
                   });
               this.commentContext = '';
-              
+              this.findInfoReply()
             }
         })
     },
@@ -457,6 +475,7 @@ export default {
     color: #999;
     vertical-align: top;
     display: inline-block;
+    
   }
 
   .info_reply_li_context {

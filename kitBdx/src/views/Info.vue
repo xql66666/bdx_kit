@@ -17,8 +17,31 @@
                     <wang-editor :content="content" @editorContent="getEditorContent"/>
                     <h2>效果区域展示：</h2> -->
                     <div>
-                    <h1 align="center">新闻资讯</h1>
+                    <!-- <h1 align="center">新闻资讯</h1> -->
+                        <el-carousel :interval="5000" arrow="always" height="100" class="info_carousel">
+                          <el-carousel-item v-for="item in 4" :key="item">
+                              <img src="http://b.zol-img.com.cn/desk/bizhi/image/6/960x600/142180751573.jpg">
+                          </el-carousel-item>
+                          
+                        </el-carousel>
+                    
                     <main class="infomain" v-infinite-scroll="loadMore">
+                     
+                        <div>
+                          <el-card class="info_type_card" shadow="hover">
+                            <ul class="info_type_ul">
+                             <router-link :to="{name:'info'}"  class="info_type_li" style="color: #707070; background-color: #f44444;">推荐</router-link>
+                             <router-link :to="{name:'infoMation'}"  class="info_type_li" style="color: #707070;">资讯</router-link>
+                             <router-link :to="{name:'infoAdvise'}"  class="info_type_li" style="color: #707070;">通知</router-link>
+                             <router-link :to="{name:'infoActivity'}"  class="info_type_li" style="color: #707070;">活动</router-link>
+                             <router-link :to="{name:'infoOther'}"  class="info_type_li" style="color: #707070;">其他</router-link>
+                             
+                           </ul>
+                          </el-card>
+
+                           
+                        </div>
+                      
                     
                         <ul class="infoul" v-loading.body="listLoading">
                        
@@ -214,6 +237,50 @@ export default {
   .infoh3{
       color: black;
       font-weight: 500
+  }
+
+  .info_carousel {
+    width: 900px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .info_type_ul {
+    margin-top: 5px;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .info_type_li {
+    margin-top: 1px;
+    width: 100%;
+    height: 30px;
+    display: block;
+    font-size: 14px;
+    margin-bottom: 1px;
+    text-align:center
+  }
+
+  .info_type_card {
+    margin-top: 10px;
+    margin-right: 6px;
+    width: 80px;
+  }
+
+  .info_type_li:hover {
+    color: #FAFAFA;
+    background-color: #f44444;
+    
+  }
+
+  .info_type_li:visited {
+    background-color: #f44444;
+  }
+
+  .el-card__body {
+    padding: 0px;
   }
 
 </style>

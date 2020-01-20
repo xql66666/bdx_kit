@@ -37,32 +37,39 @@
                             class="dropdown-menu"
                             
                           >
-                            <li class="dropdown-header">主页功能列表</li>
+                            <li class="dropdown-header" v-show="loadinglogin()">主页功能列表（登陆后可访问）</li>
+                            <li class="dropdown-header" v-show="loadinguser()">主页功能列表</li>
+
                             <li>
-                              <!-- <a href="/index" class="dropdown-item">主页</a> -->
                               <router-link :to="{name:'index'}"> 主页 </router-link>
                             </li>
-                            <li>
-                              <!-- <a href="/profile" class="dropdown-item"> -->
+
+                            <li v-show="loadinglogin()">
+                                <router-link :to="{name:'login'}"> 留言（请先登录） </router-link>
+                            </li>
+                            <li v-show="loadinguser()">
                                 <router-link :to="{name:'message'}"> 留言 </router-link>
-                              <!-- </a> -->
                             </li>
-                            <li>
-                              <!-- <a href="#" class="dropdown-item"
-                                >资讯通知</a
-                              > -->
-                              <router-link :to="{name:'info'}"> 资讯通知 </router-link>
+
+                            <li v-show="loadinglogin()">
+                              <router-link :to="{name:'login'}"> 活动资讯（请先登录） </router-link>
                             </li>
-                            <li>
-                              <!-- <a href="#" class="dropdown-item"
-                                >学习资源 （暂未开放）</a
-                              > -->
+                            <li v-show="loadinguser()">
+                              <router-link :to="{name:'info'}"> 活动资讯 </router-link>
+                            </li>
+
+                            <li v-show="loadinglogin()">
+                              <router-link :to="{name:'login'}"> 学习资源（请先登录） </router-link>
+                            </li>
+                            <li v-show="loadinguser()">
                               <router-link :to="{name:'source'}"> 学习资源 </router-link>
                             </li>
+
+
                             <li class="dropdown-divider"></li>
                             <li>
                               <a href="#" class="dropdown-item"
-                                >内部入口 （暂未开放）</a
+                                > 内部入口 </a
                               >
                             </li>
                             <li class="dropdown-divider"></li>

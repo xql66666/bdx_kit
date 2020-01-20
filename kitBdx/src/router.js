@@ -48,6 +48,38 @@ export default new Router({
       }
     },
     {
+      path: "/info/mation",
+      name: "infoMation",
+      components: { default: () => import('@/views/info/InfoMation'), header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 200 }
+      }
+    },
+    {
+      path: "/info/activity",
+      name: "infoActivity",
+      components: { default: () => import('@/views/info/InfoActivity'), header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 200 }
+      }
+    },
+    {
+      path: "/info/advise",
+      name: "infoAdvise",
+      components: { default: () => import('@/views/info/InfoAdvise'), header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 200 }
+      }
+    },
+    {
+      path: "/info/other",
+      name: "infoOther",
+      components: { default: () => import('@/views/info/InfoOther'), header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 200 }
+      }
+    },
+    {
       path: "/message",
       name: "message",
       components: { default: () => import('@/views/Message'), header: MainNavbar, footer: MainFooter },

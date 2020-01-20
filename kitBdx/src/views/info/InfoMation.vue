@@ -31,9 +31,9 @@
                           <el-card class="info_type_card" shadow="hover">
                             <ul class="info_type_ul">
                              <router-link :to="{name:'info'}"  class="info_type_li" style="color: #707070;">推荐</router-link>
-                             <router-link :to="{name:'infoMation'}"  class="info_type_li" style="color: #707070;">资讯</router-link>
+                             <router-link :to="{name:'infoMation'}"  class="info_type_li" style="color: #707070; background-color: #f44444;">资讯</router-link>
                              <router-link :to="{name:'infoAdvise'}"  class="info_type_li" style="color: #707070;">通知</router-link>
-                             <router-link :to="{name:'infoActivity'}"  class="info_type_li" style="color: #707070; background-color: #f44444;">活动</router-link>
+                             <router-link :to="{name:'infoActivity'}"  class="info_type_li" style="color: #707070;">活动</router-link>
                              <router-link :to="{name:'infoOther'}"  class="info_type_li" style="color: #707070;">其他</router-link>
                              
                            </ul>
@@ -123,7 +123,7 @@ export default {
   methods: {
     findInfoList() {
       this.listLoading = true
-      findAllInfoListByType(this.page, 3).then(response => {
+      findAllInfoListByType(this.page, 1).then(response => {
         this.infos = response.data
         this.listLoading = false
       }).catch(() => {
@@ -133,7 +133,7 @@ export default {
     loadMore() {
       this.listLoading = true
       this.page++
-      findAllInfoListByType(this.page, 3).then(response => {
+      findAllInfoListByType(this.page, 1).then(response => {
         this.infos = this.infos.concat(response.data)
         this.listLoading = false
       }).catch(() => {

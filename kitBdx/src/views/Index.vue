@@ -74,9 +74,9 @@
         </div>
       </div>
 
-      <div class="section section-notifications">
+      <!-- <div class="section section-notifications">
         <notifications></notifications>
-      </div>
+      </div> -->
 
        
 

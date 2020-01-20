@@ -59,7 +59,7 @@ service.interceptors.response.use(
                 router.go(-1);
             }
     
-            if (res.code === 700 || res.code === 600) {
+            if (res.code === 700) {
                 store.dispatch('FedLogOut').then(() => {
                     Message({
                         message: '登录信息失效，请重新登录!',
@@ -69,6 +69,18 @@ service.interceptors.response.use(
                      location.reload()
     
                 })
+                router.push({ path: '/login' })
+            }
+
+            if (res.code === 600) {
+
+                    Message({
+                        message: '请先登录!',
+                        type: 'error',
+                        duration: 10 * 1000
+                    })
+                     location.reload()
+
                 router.push({ path: '/login' })
             }
             //loadingInstance.close();

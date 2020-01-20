@@ -39,7 +39,7 @@
                 :key="index">
                 <el-tag style="margin-left: 980px;" v-if="msg.messageLevel === 1">置顶</el-tag>
                     <el-tag type="danger" style="margin-left: 980px;" v-if="msg.messageLevel === 3">热门</el-tag>
-                <el-card>
+                <el-card class="message_card_body">
                   
                   <h3>{{msg.messageTitle}}
                     
@@ -226,6 +226,10 @@ export default {
 
   .section {
     padding: 0;
+  }
+
+  .message_card_body {
+    padding: 20px;
   }
 
 .profile-tabs /deep/ {

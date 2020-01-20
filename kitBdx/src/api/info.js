@@ -8,6 +8,13 @@ export function findAllInfoList(currentPage) {
       })
   }
 
+  export function findAllInfoListByType(currentPage, infoType) {
+    return request({
+        url: `/${group_name}/${api_name}/findAllInfoByType/${currentPage}/${infoType}`,
+        method: 'post'
+      })
+  }
+
   export function findInfoDeatil(id) {
     return request({
         url: `/${group_name}/${api_name}/findInfoById/${id}`,
@@ -32,3 +39,6 @@ export function findAllInfoList(currentPage) {
         method: 'post',
       })
   }
+
+
+
